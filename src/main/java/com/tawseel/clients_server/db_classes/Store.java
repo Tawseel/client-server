@@ -22,8 +22,14 @@ public class Store {
     private String email;
     @Column(name = "password")
     private String password;
+    @Column(name = "user_image")
+    private String userImage;
+    @Column(name = "post_image")
+    private String postImage;
 
-    public Store(String name, String address, String openingTime, String closingTime, String phoneNumber, String email, String password) {
+    public Store(String name, String address, String openingTime,
+                 String closingTime, String phoneNumber, String email,
+                 String password, String userImage, String postImage) {
         this.name = name;
         this.address = address;
         this.openingTime = openingTime;
@@ -31,10 +37,28 @@ public class Store {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
+        this.userImage = userImage;
+        this.postImage = postImage;
     }
 
     public Store() {
 
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
+    public String getPostImage() {
+        return postImage;
+    }
+
+    public void setPostImage(String postImage) {
+        this.postImage = postImage;
     }
 
     public int getId() {

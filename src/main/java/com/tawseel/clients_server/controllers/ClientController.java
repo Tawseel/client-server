@@ -1,12 +1,12 @@
 package com.tawseel.clients_server.controllers;
 
+import com.tawseel.clients_server.TokensManager;
 import com.tawseel.clients_server.db_classes.Client;
 import com.tawseel.clients_server.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,15 +14,19 @@ import java.util.List;
 @RequestMapping("/client")
 public class ClientController {
     @Autowired
+    private TokensManager tokensManager;
+    @Autowired
     ClientService clientService;
     @GetMapping("/getAllClients")
-    public List<Client> getAllClients()
+    public ResponseEntity<List<Client>> getAllClients(@RequestHeader("Authorization") String  token)
     {
-        return clientService.getAllClients();
+        Integer clientID = tokensManager.verifyToken(token);
+        return new ResponseEntity<>(clientService.getAllClients(), HttpStatus.OK);
     }
     @PostMapping("/addClient")
     public void addClientToDB(Client client)
     {
         clientService.addClientToDB(client);
     }
+
 }
