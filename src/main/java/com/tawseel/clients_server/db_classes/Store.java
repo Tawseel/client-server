@@ -12,53 +12,36 @@ public class Store {
     private String name;
     @Column(name = "address")
     private String address;
-    @Column(name = "opening_time")
-    private String openingTime;
-    @Column(name = "closing_time")
-    private String closingTime;
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "email")
     private String email;
     @Column(name = "password")
     private String password;
-    @Column(name = "user_image")
-    private String userImage;
-    @Column(name = "post_image")
-    private String postImage;
+    @Column(name = "image_path")
+    private String imagePath;
 
     public Store(String name, String address, String openingTime,
                  String closingTime, String phoneNumber, String email,
-                 String password, String userImage, String postImage) {
+                 String password, String imagePath) {
         this.name = name;
         this.address = address;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
-        this.userImage = userImage;
-        this.postImage = postImage;
+        this.imagePath = imagePath;
     }
 
     public Store() {
 
     }
 
-    public String getUserImage() {
-        return userImage;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
-    }
-
-    public String getPostImage() {
-        return postImage;
-    }
-
-    public void setPostImage(String postImage) {
-        this.postImage = postImage;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public int getId() {
@@ -85,21 +68,6 @@ public class Store {
         this.address = address;
     }
 
-    public String getOpeningTime() {
-        return openingTime;
-    }
-
-    public void setOpeningTime(String openingTime) {
-        this.openingTime = openingTime;
-    }
-
-    public String getClosingTime() {
-        return closingTime;
-    }
-
-    public void setClosingTime(String closingTime) {
-        this.closingTime = closingTime;
-    }
 
     public String getPhoneNumber() {
         return phoneNumber;
