@@ -34,4 +34,12 @@ public class Payment {
     public void setAmountPaid(int amountPaid) {
         this.amountPaid = amountPaid;
     }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", amountPaid=" + amountPaid +
+                '}';
+    }
 }

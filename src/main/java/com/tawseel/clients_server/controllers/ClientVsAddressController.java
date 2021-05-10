@@ -1,13 +1,13 @@
 package com.tawseel.clients_server.controllers;
 
-import com.tawseel.clients_server.services.Client_vs_AddressService;
+import com.tawseel.clients_server.services.ClientVsAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/clientVsAddress")
-public class Client_vs_AddressController {
+public class ClientVsAddressController {
     @Autowired
-    Client_vs_AddressService client_vs_addressService;
+    ClientVsAddressService client_vs_addressService;
 }

@@ -2,6 +2,7 @@ package com.tawseel.clients_server.db_classes;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "clients")
@@ -21,8 +22,11 @@ public class Client {
     private String password;
     @Column(name = "registration_date")
     private Date registrationDate;
+    @OneToMany(mappedBy ="clientID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    private Set<Order> orders;
 
-    public Client(String firstName, String lastName, String phoneNumber, String email, String password, Date registrationDate) {
+    public Client(String firstName, String lastName, String phoneNumber, String email,
+                  String password, Date registrationDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -33,6 +37,14 @@ public class Client {
 
     public Client() {
 
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     public int getId() {
@@ -89,5 +101,19 @@ public class Client {
 
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", orders=" + orders +
+                '}';
     }
 }

@@ -1,6 +1,7 @@
 package com.tawseel.clients_server.db_classes;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Items")
@@ -15,17 +16,41 @@ public class Item {
     @Column(name = "price")
     private int price;
     @Column(name = "category")
-    private int category;
+    private String category;
+    @Column(name = "store_id")
+    private int storeID;
+    @OneToMany(mappedBy ="itemID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    private Set<Components> components;
+    @Column(name = "image_path")
+    private String imagePath;
 
-    public Item(String name, String description, int price, int category) {
+    public Item(String name, String description, int price, String category, int storeID, String imagePath) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
+        this.storeID = storeID;
+        this.imagePath = imagePath;
     }
 
     public Item() {
 
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public Set<Components> getComponents() {
+        return components;
+    }
+
+    public void setComponents(Set<Components> components) {
+        this.components = components;
     }
 
     public int getId() {
@@ -60,11 +85,31 @@ public class Item {
         this.price = price;
     }
 
-    public int getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(int category) {
+    public void setCategory(String category) {
         this.category = category;
+    }
+
+    public int getStoreID() {
+        return storeID;
+    }
+
+    public void setStoreID(int storeID) {
+        this.storeID = storeID;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", category='" + category + '\'' +
+                ", storeID=" + storeID +
+                '}';
     }
 }

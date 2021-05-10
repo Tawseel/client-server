@@ -4,13 +4,13 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "clients_vs_addresses")
-public class Client_vs_Address {
+public class ClientVsAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int client_id;
     private int address_id;
 
-    public Client_vs_Address() {
+    public ClientVsAddress() {
     }
 
     public int getClient_id() {
@@ -27,5 +27,13 @@ public class Client_vs_Address {
 
     public void setAddress_id(int address_id) {
         this.address_id = address_id;
+    }
+
+    @Override
+    public String toString() {
+        return "ClientVsAddress{" +
+                "client_id=" + client_id +
+                ", address_id=" + address_id +
+                '}';
     }
 }
