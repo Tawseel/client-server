@@ -20,47 +20,30 @@ public class StoreDetails {
     //todo add the two columns
     @Column(name = "is_featured")
     private boolean isFeatured;
-
+    @Column(name = "category")
+    private String category;
 
     @OneToMany(mappedBy ="storeID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<StoreCoordinates> storeCoordinates;
 
+    public StoreDetails() {
+    }
+
 
     public StoreDetails(String name,
-                        String phoneNumber, String description, String imagePath, boolean isFeatured) {
+                        String phoneNumber,
+                        String description,
+                        String imagePath,
+                        boolean isFeatured,
+                        String category,
+                        Set<StoreCoordinates> storeCoordinates) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.description = description;
         this.imagePath = imagePath;
         this.isFeatured = isFeatured;
-    }
-
-    public StoreDetails() {
-
-    }
-
-    public Set<StoreCoordinates> getStoreCoordinates() {
-        return storeCoordinates;
-    }
-
-    public void setStoreCoordinates(Set<StoreCoordinates> storeCoordinates) {
+        this.category = category;
         this.storeCoordinates = storeCoordinates;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getId() {
@@ -79,14 +62,6 @@ public class StoreDetails {
         this.name = name;
     }
 
-    public boolean isFeatured() {
-        return isFeatured;
-    }
-
-    public void setFeatured(boolean featured) {
-        isFeatured = featured;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -95,16 +70,45 @@ public class StoreDetails {
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public String toString() {
-        return "StoreDetails{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", description='" + description + '\'' +
-                ", imagePath='" + imagePath + '\'' +
-                ", isFeatured=" + isFeatured +
-                ", storeCoordinates=" + storeCoordinates +
-                '}';
+    public String getDescription() {
+        return description;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Set<StoreCoordinates> getStoreCoordinates() {
+        return storeCoordinates;
+    }
+
+    public void setStoreCoordinates(Set<StoreCoordinates> storeCoordinates) {
+        this.storeCoordinates = storeCoordinates;
+    }
+
+
 }
