@@ -26,6 +26,8 @@ public class StoreDetailsController {
     public ResponseEntity<List<StoreDetails>> getAllStores(@RequestHeader("Authorization") String  token)
     {
         Integer clientID = tokensManager.verifyToken(token);
-        return new ResponseEntity<>(storeService.getAllStores(), HttpStatus.OK);
+        List<StoreDetails> storesDetails = storeService.getAllStores();
+        System.out.println(storesDetails);
+        return new ResponseEntity<>(storesDetails, HttpStatus.OK);
     }
 }

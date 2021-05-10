@@ -20,6 +20,8 @@ public class StoreDetails {
     //todo add the two columns
     @Column(name = "is_featured")
     private boolean isFeatured;
+
+
     @OneToMany(mappedBy ="storeID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<StoreCoordinates> storeCoordinates;
 
