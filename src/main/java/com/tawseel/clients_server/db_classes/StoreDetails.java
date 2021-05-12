@@ -86,11 +86,11 @@ public class StoreDetails {
         this.imagePath = imagePath;
     }
 
-    public boolean isFeatured() {
+    public boolean getIsFeatured() {
         return isFeatured;
     }
 
-    public void setFeatured(boolean featured) {
+    public void setIsFeatured(boolean featured) {
         isFeatured = featured;
     }
 
@@ -110,5 +110,17 @@ public class StoreDetails {
         this.storeCoordinates = storeCoordinates;
     }
 
-
+    @Override
+    public String toString() {
+        return "StoreDetails{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", description='" + description + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", isFeatured=" + isFeatured +
+                ", category='" + category + '\'' +
+                ", storeCoordinates=" + storeCoordinates +
+                '}';
+    }
 }
