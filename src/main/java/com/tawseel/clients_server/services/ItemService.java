@@ -1,7 +1,8 @@
 package com.tawseel.clients_server.services;
 
-import com.tawseel.clients_server.db_classes.Components;
+import com.tawseel.clients_server.db_classes.Ingredients;
 import com.tawseel.clients_server.db_classes.Item;
+import com.tawseel.clients_server.db_classes.StoreDetails;
 import com.tawseel.clients_server.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,13 @@ public class ItemService {
     @Autowired
     ItemRepository itemRepository;
 
-    public List<Components> getComponentsByItemID(Integer itemID)
+    public List<Ingredients> getIngredientsByItemID(Integer itemID)
     {
         //better exception.
         Item item = itemRepository.findItemById(itemID);
         if(item != null) {
-            Set<Components> components = item.getComponents();
-            List<Components> list = new ArrayList<>(components);
+            Set<Ingredients> ingredients = item.getIngredients();
+            List<Ingredients> list = new ArrayList<>(ingredients);
             return list;
         }
         else

@@ -16,7 +16,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="clients_server" />
-          <factory-entry name="entityManagerFactory" value="9b9a9fae-d999-4213-b6ea-b1c615df6b9a" />
+          <factory-entry name="entityManagerFactory" value="c888c48b-2351-4303-bf3a-a85949f487a7" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

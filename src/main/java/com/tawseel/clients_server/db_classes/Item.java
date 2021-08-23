@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "Items")
+@Table(name = "items")
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class Item {
     @Column(name = "store_id")
     private int storeID;
     @OneToMany(mappedBy ="itemID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-    private Set<Components> components;
+    private Set<Ingredients> ingredients;
     @Column(name = "image_path")
     private String imagePath;
 
@@ -45,12 +45,12 @@ public class Item {
         this.imagePath = imagePath;
     }
 
-    public Set<Components> getComponents() {
-        return components;
+    public Set<Ingredients> getIngredients() {
+        return ingredients;
     }
 
-    public void setComponents(Set<Components> components) {
-        this.components = components;
+    public void setIngredients(Set<Ingredients> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public int getId() {
