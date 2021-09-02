@@ -1,6 +1,7 @@
 package com.tawseel.clients_server.controllers;
 
 
+import com.tawseel.clients_server.TemporaryOrder;
 import com.tawseel.clients_server.TokensManager;
 import com.tawseel.clients_server.table.Order;
 import com.tawseel.clients_server.services.OrderService;
@@ -27,10 +28,11 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getPurchaseHistory(client_ID), HttpStatus.OK);
     }
 
-    @PostMapping("/addOrder")
-    public void addOrder(@RequestHeader("Authorization") String token, Order order)
+    @PostMapping("/addOrders")
+    public boolean addOrder(@RequestHeader("Authorization") String token, List<TemporaryOrder> temporaryOrders)
     {
-        Integer clientID = tokensManager.verifyToken(token);
-        orderService.addOrder(clientID, order);
+        Integer userID = tokensManager.verifyToken(token);
+        boolean succeed = orderService.addOrder(userID, temporaryOrders);
+        return succeed;
     }
 }
