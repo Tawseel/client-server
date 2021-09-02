@@ -22,22 +22,21 @@ public class OrderService {
     {
         LocalDateTime dateTime = LocalDateTime.now();
 
-//        for(temporaryOrders i : temporaryOrders) {
+//        for(TemporaryOrder i : temporaryOrders) {
 //            //todo: add validations.
-//            Item item = itemRepository.findItemById(itemId);
+//            Item item = itemRepository.findItemById();
 //            if(item != null)
 //            {
 //                int storeId = item.getStoreID();
 //            } else { return false; }
 //
 //        }
-//
+        return true;
 //        if(orderToAdd != null)
 //        {
 //            orderToAdd.setUserId(userId);
 //            orderRepository.saveAndFlush(orderToAdd);
 //        }
-        return true;
     }
 
     public List<Order> getPurchaseHistory(Integer clientID)
