@@ -1,31 +1,28 @@
 package com.tawseel.clients_server.services;
 
-import com.tawseel.clients_server.db_classes.Client;
-import com.tawseel.clients_server.db_classes.Item;
-import com.tawseel.clients_server.db_classes.Order;
-import com.tawseel.clients_server.db_classes.Type;
-import com.tawseel.clients_server.repositories.ClientRepository;
-import com.tawseel.clients_server.repositories.OrderRepository;
+import com.tawseel.clients_server.repositories.CardOrderRepository;
+import com.tawseel.clients_server.table.order.CardOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class ClientService {
     @Autowired
-    ClientRepository clientRepository;
+    CardOrderRepository cardOrderRepository;
 
-    public List<Client> getAllClients()
-    {
-        List<Client> list = clientRepository.findAll();
-        return list;
+    public boolean addOrderToCard(Integer userId, CardOrder cardOrder) {
+        if(userId != null && cardOrder != null) {
+            cardOrder.setUserId(userId);
+            cardOrderRepository.saveAndFlush(cardOrder);
+            return true;
+        }
+
+        return false;
     }
 
-
-    public void addClientToDB(Client client)
-    {
-        clientRepository.saveAndFlush(client);
+    public List<CardOrder> getClientCard(Integer userId) {
+        return cardOrderRepository.findCardOrderByUserId(userId);
     }
 }

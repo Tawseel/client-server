@@ -1,7 +1,7 @@
 package com.tawseel.clients_server.controllers;
 
 import com.tawseel.clients_server.TokensManager;
-import com.tawseel.clients_server.db_classes.Item;
+import com.tawseel.clients_server.table.Item;
 import com.tawseel.clients_server.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

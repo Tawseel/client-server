@@ -2,9 +2,7 @@ package com.tawseel.clients_server.controllers;
 
 
 import com.tawseel.clients_server.TokensManager;
-import com.tawseel.clients_server.db_classes.Client;
-import com.tawseel.clients_server.db_classes.Item;
-import com.tawseel.clients_server.db_classes.Order;
+import com.tawseel.clients_server.table.Order;
 import com.tawseel.clients_server.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

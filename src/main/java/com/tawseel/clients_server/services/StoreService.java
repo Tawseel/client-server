@@ -1,7 +1,7 @@
 package com.tawseel.clients_server.services;
 
-import com.tawseel.clients_server.db_classes.Item;
-import com.tawseel.clients_server.db_classes.Store;
+import com.tawseel.clients_server.table.Item;
+import com.tawseel.clients_server.table.Store;
 import com.tawseel.clients_server.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

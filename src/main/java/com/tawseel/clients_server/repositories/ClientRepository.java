@@ -1,6 +1,6 @@
 package com.tawseel.clients_server.repositories;
 
-import com.tawseel.clients_server.db_classes.Client;
+import com.tawseel.clients_server.table.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {

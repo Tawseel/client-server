@@ -1,8 +1,10 @@
 package com.tawseel.clients_server.controllers;
 
 import com.tawseel.clients_server.TokensManager;
-import com.tawseel.clients_server.db_classes.Client;
+import com.tawseel.clients_server.table.Client;
 import com.tawseel.clients_server.services.ClientService;
+import com.tawseel.clients_server.table.Ingredients;
+import com.tawseel.clients_server.table.order.CardOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +19,13 @@ public class ClientController {
     private TokensManager tokensManager;
     @Autowired
     ClientService clientService;
-    @GetMapping("/getAllClients")
-    public ResponseEntity<List<Client>> getAllClients(@RequestHeader("Authorization") String  token)
+
+    @PostMapping("/addToCard")
+    public ResponseEntity<Boolean> getIngredientsByItemID(@RequestBody CardOrder cardOrder,
+                                                                    @RequestHeader("Authorization") String token)
     {
         Integer clientID = tokensManager.verifyToken(token);
-        return new ResponseEntity<>(clientService.getAllClients(), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.addOrderToCard(clientID, cardOrder), HttpStatus.OK);
     }
-    @PostMapping("/addClient")
-    public void addClientToDB(Client client)
-    {
-        clientService.addClientToDB(client);
-    }
-
 
 }

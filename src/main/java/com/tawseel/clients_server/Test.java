@@ -1,6 +1,5 @@
 package com.tawseel.clients_server;
 
-import com.tawseel.clients_server.db_classes.*;
 import com.tawseel.clients_server.services.ItemService;
 import com.tawseel.clients_server.services.OrderService;
 import com.tawseel.clients_server.services.StoreDetailsService;

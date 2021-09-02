@@ -1,6 +1,6 @@
 package com.tawseel.clients_server.repositories;
 
-import com.tawseel.clients_server.db_classes.Order;
+import com.tawseel.clients_server.table.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
