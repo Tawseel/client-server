@@ -4,11 +4,8 @@ import com.tawseel.clients_server.TemporaryOrder;
 import com.tawseel.clients_server.repositories.CartOrderValueRepository;
 import com.tawseel.clients_server.repositories.ClientRepository;
 import com.tawseel.clients_server.repositories.ItemRepository;
-import com.tawseel.clients_server.table.Client;
-import com.tawseel.clients_server.table.Item;
-import com.tawseel.clients_server.table.Order;
+import com.tawseel.clients_server.table.*;
 import com.tawseel.clients_server.repositories.OrderRepository;
-import com.tawseel.clients_server.table.Type;
 import com.tawseel.clients_server.table.order.CardOrderValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,45 +27,33 @@ public class OrderService {
         this.cartOrderValueRepository = cartOrderValueRepository;
     }
 
-    @Transactional
-    public boolean addOrder(Integer clientID, List<TemporaryOrder> temporaryOrders)
-    {
-        Order orderToAdd = null;
-        int orderID;
-        if(clientID != null && temporaryOrders != null) {
-            int totalPrice = 0;
-            for (TemporaryOrder temporaryOrder : temporaryOrders) {
-                if (temporaryOrder.getItem() != null) {
-                    orderToAdd = new Order();
-                    Order orderFromDB = orderRepository.save(orderToAdd);
-                    if(orderFromDB != null)
-                    {
-                        orderID = orderFromDB.getId();
-                    } else { return false; }
-                    orderToAdd.setItem(temporaryOrder.getItem());
-                    orderToAdd.setStoreID(temporaryOrder.getItem().getStoreID());
-                    totalPrice += temporaryOrder.getItem().getPrice();
-                    Set<CardOrderValue> cardOrderValueSet = new HashSet<>(temporaryOrder.getValues());
-                    orderToAdd.setDateTime(LocalDateTime.now());
-                    Client client;
-                    client = clientRepository.findClientById(clientID);
-                    if(client != null) {
-                        orderToAdd.setClient(client);
-                    } else {return false;}
-                    for (CardOrderValue cardOrderValue: cardOrderValueSet)
-                    {
-                        cardOrderValue.setOrderID(orderID);
-                        cartOrderValueRepository.saveAndFlush(cardOrderValue);
-                    }
-                }
+    public boolean addOrder(Integer clientID, List<TemporaryOrder> temporaryOrders) {
+        for (TemporaryOrder temporaryOrder : temporaryOrders) {
+            Order order = createOrderFromTemporaryOrderList(clientID, temporaryOrder);
+            order = orderRepository.save(order);
+            order.setCardOrderValueList(new HashSet<>(temporaryOrder.getValues()));
+            for (CardOrderValue value : temporaryOrder.getValues()) {
+                value.setOrderID(order.getId());
             }
-            if(orderToAdd != null)
-            {
-                orderToAdd.setTotalPrice(totalPrice);
-                orderRepository.saveAndFlush(orderToAdd);
-            }
+            orderRepository.flush();
         }
-        return orderToAdd != null;
+
+        return true;
+    }
+
+    private Order createOrderFromTemporaryOrderList(Integer clientID, TemporaryOrder temporaryOrder) {
+        Item item = temporaryOrder.getItem();
+
+        Client client = clientRepository.findClientById(clientID);
+
+        return new Order(0,
+                LocalDateTime.now(),
+                item,
+                item.getPrice(),
+                client,
+                OrderStatus.New,
+                item.getStoreID(),
+                new HashSet<>());
     }
 
     public List<Order> getPurchaseHistory(Client client)

@@ -4,27 +4,29 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "card_order_value")
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class CardOrderValue {
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "key")
-    private String key;
+    @Column(name = "ingredient_name")
+    private String ingredientName;
 
-    @Column(name = "value")
-    private String value;
+    @Column(name = "ingredient_value")
+    private String ingredientValue;
 
     @Column(name = "order_id")
     private int orderID;
+
+    public CardOrderValue(String ingredientName, String ingredientValue, int orderID) {
+        this.ingredientName = ingredientName;
+        this.ingredientValue = ingredientValue;
+        this.orderID = orderID;
+    }
 }
