@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @Entity
 @Table(name = "orders")
@@ -19,24 +21,28 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(name = "date_time")
     private LocalDateTime dateTime;
+
+    @OneToOne
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    private Item item;
+
     @Column(name = "total_price")
     private int totalPrice;
-    @Column(name = "store_id")
-    private int storeId;
-    @Column(name = "user_id")
-    private int userId;
-    @Column(name = "item_id")
-    private int itemId;
+
+    @OneToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    private Client client;
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @Column(name="store_id")
+    private int storeID;
+
     @OneToMany(mappedBy ="orderID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<CardOrderValue> cardOrderValueList;
-
-    public void addCardOrderValue(CardOrderValue cardOrderValue)
-    {
-        cardOrderValueList.add(cardOrderValue);
-    }
 }

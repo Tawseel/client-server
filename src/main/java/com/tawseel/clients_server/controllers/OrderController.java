@@ -3,6 +3,8 @@ package com.tawseel.clients_server.controllers;
 
 import com.tawseel.clients_server.TemporaryOrder;
 import com.tawseel.clients_server.TokensManager;
+import com.tawseel.clients_server.services.ClientService;
+import com.tawseel.clients_server.table.Client;
 import com.tawseel.clients_server.table.Order;
 import com.tawseel.clients_server.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,23 @@ public class OrderController {
     @Autowired
     OrderService orderService;
     @Autowired
+    ClientService clientService;
+    @Autowired
     private TokensManager tokensManager;
 
-    @GetMapping("/{id}/AllOrders")
-    public ResponseEntity<List<Order>> getAllOrdersByClientID(@PathVariable("id") int client_ID,
-                                                              @RequestHeader("Authorization") String token)
+    @GetMapping("/AllOrders")
+    public ResponseEntity<List<Order>> getAllPurchaseHistory(@RequestHeader("Authorization") String token)
     {
         Integer clientID = tokensManager.verifyToken(token);
-        return new ResponseEntity<>(orderService.getPurchaseHistory(client_ID), HttpStatus.OK);
+        Client client = clientService.findClientById(clientID);
+        return new ResponseEntity<>(orderService.getPurchaseHistory(client), HttpStatus.OK);
     }
 
-    @PostMapping("/addOrder")
+    @PostMapping("/addOrders")
     public ResponseEntity<Boolean> addOrder(@RequestHeader("Authorization") String token,@RequestBody List<TemporaryOrder> temporaryOrders)
     {
-        Integer userID = tokensManager.verifyToken(token);
-        boolean succeed = orderService.addOrder(userID, temporaryOrders);
+        Integer clientID = tokensManager.verifyToken(token);
+        boolean succeed = orderService.addOrder(clientID, temporaryOrders);
         return new ResponseEntity<>(succeed, HttpStatus.OK);
     }
 }

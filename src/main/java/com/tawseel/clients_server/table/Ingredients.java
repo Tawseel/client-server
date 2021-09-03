@@ -30,6 +30,7 @@ public class Ingredients {
     @OneToMany(mappedBy ="ingredientID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<Value> values;
 
-    @OneToMany(mappedBy ="ingredientID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-    private Set<IngredientConfiguration> ingredientConfiguration;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "config_id", referencedColumnName = "id")
+    private IngredientConfiguration ingredientConfiguration;
 }
