@@ -1,26 +1,16 @@
 package com.tawseel.clients_server;
 
 import com.tawseel.clients_server.table.Item;
+import com.tawseel.clients_server.table.order.CardOrderValue;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-
+import java.util.List;
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class TemporaryOrder {
     private Item item;
-    private HashMap<String, String> values;
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public HashMap<String, String> getValues() {
-        return values;
-    }
-
-    public void setValues(HashMap<String, String> values) {
-        this.values = values;
-    }
+    private List<CardOrderValue> values;
 }

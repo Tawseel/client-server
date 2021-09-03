@@ -25,6 +25,6 @@ public class CardOrderValue {
     @Column(name = "value")
     private String value;
 
-    @Column(name = "card_order_id")
-    private int cardOrderID;
+    @Column(name = "order_id")
+    private int orderID;
 }

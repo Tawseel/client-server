@@ -20,19 +20,19 @@ public class OrderController {
     @Autowired
     private TokensManager tokensManager;
 
-    @GetMapping("/{id}/purchaseHistory")
-    public ResponseEntity<List<Order>> getPurchaseHistoryByClientID(@PathVariable("id") int client_ID,
-                                                                    @RequestHeader("Authorization") String token)
+    @GetMapping("/{id}/AllOrders")
+    public ResponseEntity<List<Order>> getAllOrdersByClientID(@PathVariable("id") int client_ID,
+                                                              @RequestHeader("Authorization") String token)
     {
         Integer clientID = tokensManager.verifyToken(token);
         return new ResponseEntity<>(orderService.getPurchaseHistory(client_ID), HttpStatus.OK);
     }
 
-    @PostMapping("/addOrders")
-    public boolean addOrder(@RequestHeader("Authorization") String token, List<TemporaryOrder> temporaryOrders)
+    @PostMapping("/addOrder")
+    public ResponseEntity<Boolean> addOrder(@RequestHeader("Authorization") String token,@RequestBody List<TemporaryOrder> temporaryOrders)
     {
         Integer userID = tokensManager.verifyToken(token);
         boolean succeed = orderService.addOrder(userID, temporaryOrders);
-        return succeed;
+        return new ResponseEntity<>(succeed, HttpStatus.OK);
     }
 }

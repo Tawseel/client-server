@@ -29,6 +29,14 @@ public class Order {
     private int userId;
     @Column(name = "item_id")
     private int itemId;
-    @OneToMany(mappedBy ="cardOrderID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+    @OneToMany(mappedBy ="orderID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<CardOrderValue> cardOrderValueList;
+
+    public void addCardOrderValue(CardOrderValue cardOrderValue)
+    {
+        cardOrderValueList.add(cardOrderValue);
+    }
 }
