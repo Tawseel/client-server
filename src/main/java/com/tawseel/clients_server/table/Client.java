@@ -29,4 +29,6 @@ public class Client {
     private String password;
     @Column(name = "registration_date")
     private Date registrationDate;
+    @Column(name = "points")
+    private int points;
 }

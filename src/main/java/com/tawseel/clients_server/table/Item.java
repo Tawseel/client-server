@@ -23,7 +23,8 @@ public class Item {
     @Column(name = "price")
     private int price;
     @Column(name = "category")
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Categories category;
     @Column(name = "store_id")
     private int storeID;
     @OneToMany(mappedBy ="itemID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)

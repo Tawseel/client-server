@@ -1,6 +1,7 @@
 package com.tawseel.clients_server.controllers;
 
 
+import com.tawseel.clients_server.StatusUpdate;
 import com.tawseel.clients_server.TemporaryOrder;
 import com.tawseel.clients_server.TokensManager;
 import com.tawseel.clients_server.services.ClientService;
@@ -37,6 +38,13 @@ public class OrderController {
     {
         Integer clientID = tokensManager.verifyToken(token);
         boolean succeed = orderService.addOrder(clientID, temporaryOrders);
+        return new ResponseEntity<>(succeed, HttpStatus.OK);
+    }
+
+    @PostMapping("/updateStatus")
+    public ResponseEntity<Boolean> updateOrderStatus(@RequestHeader("Authorization") String token, @RequestBody StatusUpdate statusUpdate)
+    {
+        boolean succeed = orderService.updateOrderStatus(statusUpdate);
         return new ResponseEntity<>(succeed, HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.tawseel.clients_server.services;
 
+import com.tawseel.clients_server.StatusUpdate;
 import com.tawseel.clients_server.TemporaryOrder;
 import com.tawseel.clients_server.repositories.CartOrderValueRepository;
 import com.tawseel.clients_server.repositories.ClientRepository;
@@ -28,17 +29,32 @@ public class OrderService {
     }
 
     public boolean addOrder(Integer clientID, List<TemporaryOrder> temporaryOrders) {
+        int totalPrice = 0;
+        Order order = null;
         for (TemporaryOrder temporaryOrder : temporaryOrders) {
-            Order order = createOrderFromTemporaryOrderList(clientID, temporaryOrder);
-            order = orderRepository.save(order);
+             order = createOrderFromTemporaryOrderList(clientID, temporaryOrder);
+            totalPrice += order.getItem().getPrice();
             order.setCardOrderValueList(new HashSet<>(temporaryOrder.getValues()));
             for (CardOrderValue value : temporaryOrder.getValues()) {
                 value.setOrderID(order.getId());
             }
-            orderRepository.flush();
         }
-
+        if(order != null) {
+            order.setTotalPrice(totalPrice);
+            orderRepository.save(order);
+        }
+        calculatePointsForClient(clientID, totalPrice);
+        orderRepository.flush();
         return true;
+    }
+
+    private void calculatePointsForClient(Integer clientID, Integer orderTotalPrice)
+    {
+        double newPointsValue;
+        Client client = clientRepository.findClientById(clientID);
+        newPointsValue = client.getPoints() + (0.1 * orderTotalPrice);
+        client.setPoints((int)newPointsValue);
+        clientRepository.saveAndFlush(client);
     }
 
     private Order createOrderFromTemporaryOrderList(Integer clientID, TemporaryOrder temporaryOrder) {
@@ -49,7 +65,7 @@ public class OrderService {
         return new Order(0,
                 LocalDateTime.now(),
                 item,
-                item.getPrice(),
+                0,
                 client,
                 OrderStatus.New,
                 item.getStoreID(),
@@ -62,5 +78,16 @@ public class OrderService {
         return purchaseHistory;
     }
 
+    public boolean updateOrderStatus(StatusUpdate statusUpdate)
+    {
+        Order order = orderRepository.findOrderById(statusUpdate.getOrderID());
+        if(order != null)
+        {
+            order.setStatus(statusUpdate.getOrderStatus());
+            orderRepository.saveAndFlush(order);
+        }
+        else { return false; }
+        return true;
+    }
 
 }
