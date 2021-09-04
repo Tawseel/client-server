@@ -23,7 +23,7 @@ public class ClientService {
         this.itemRepository = itemRepository;
     }
 
-    public Client findClientById (int clientId)
+    public Client findClientById (Integer clientId)
     {
         Client client = clientRepository.findClientById(clientId);
         return client;
