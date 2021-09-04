@@ -25,8 +25,6 @@ public class Client {
     private String phoneNumber;
     @Column(name = "email")
     private String email;
-    @Column(name = "password")
-    private String password;
     @Column(name = "registration_date")
     private Date registrationDate;
     @Column(name = "points")

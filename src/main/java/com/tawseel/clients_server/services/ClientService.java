@@ -8,7 +8,9 @@ import com.tawseel.clients_server.table.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ClientService {
@@ -23,12 +25,20 @@ public class ClientService {
 
     public Client findClientById (int clientId)
     {
-        return clientRepository.findClientById(clientId);
+        Client client = clientRepository.findClientById(clientId);
+        return client;
     }
 
-    public Boolean updateClientDetails(Client client)
+    @Transactional
+    public Boolean updateClientDetails(Integer clientId, Client client)
     {
-        clientRepository.saveAndFlush(client);
+        if(clientId != null) {
+            Set<Addresses> addresses = client.getAddresses();
+            if(addresses != null) {
+                addresses.forEach(addresses1 -> addresses1.setClientID(clientId));
+            }
+            clientRepository.saveAndFlush(client);
+        }
         return true;
     }
 

@@ -25,7 +25,8 @@ public class ClientController {
     public ResponseEntity<Client> getClient(@RequestHeader("Authorization") String token)
     {
         Integer clientID = tokensManager.verifyToken(token);
-        return new ResponseEntity<>(clientService.findClientById(clientID), HttpStatus.OK);
+        Client client = clientService.findClientById(clientID);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     @PutMapping("/updateClientDetails")
@@ -33,7 +34,7 @@ public class ClientController {
                                        @RequestBody Client client)
     {
         Integer clientID = tokensManager.verifyToken(token);
-        boolean succeed = clientService.updateClientDetails(client);
+        boolean succeed = clientService.updateClientDetails(clientID, client);
         return new ResponseEntity<>(succeed, HttpStatus.OK);
     }
 
