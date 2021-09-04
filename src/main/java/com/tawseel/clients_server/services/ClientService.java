@@ -16,7 +16,6 @@ public class ClientService {
 
     public Client findClientById (int clientId)
     {
-        Client client = clientRepository.findClientById(clientId);
-        return client;
+        return clientRepository.findClientById(clientId);
     }
 }
