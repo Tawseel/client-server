@@ -31,12 +31,12 @@ class OrderServiceTest {
 
     @Test
     void addOrder() {
-        int clientId = 6;
+        int clientId = 7;
         Item item = itemRepository.findItemById(12);
         List<TemporaryOrder> temporaryOrderList = new ArrayList<>();
         List<CardOrderValue> cardOrderValueList = new ArrayList<>();
-        cardOrderValueList.add(new CardOrderValue( "test", "test", 0));
-        cardOrderValueList.add(new CardOrderValue( "tes2t", "test2", 0));
+        cardOrderValueList.add(new CardOrderValue( "test", "test", 69));
+        cardOrderValueList.add(new CardOrderValue( "tes2t", "test2", 69));
         temporaryOrderList.add(new TemporaryOrder(item, cardOrderValueList));
         orderService.addOrder(clientId, temporaryOrderList);
     }
