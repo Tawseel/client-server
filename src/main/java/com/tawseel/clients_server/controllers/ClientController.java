@@ -1,7 +1,9 @@
 package com.tawseel.clients_server.controllers;
 
 import com.tawseel.clients_server.TokensManager;
+import com.tawseel.clients_server.repositories.AddressRepository;
 import com.tawseel.clients_server.services.ClientService;
+import com.tawseel.clients_server.table.Addresses;
 import com.tawseel.clients_server.table.Client;
 import com.tawseel.clients_server.table.Item;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,13 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+
     @GetMapping
     public ResponseEntity<Client> getClient(@RequestHeader("Authorization") String token)
     {
         Integer clientID = tokensManager.verifyToken(token);
         Client client = clientService.findClientById(clientID);
+
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
 

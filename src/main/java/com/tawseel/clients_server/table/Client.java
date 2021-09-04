@@ -31,8 +31,10 @@ public class Client {
     private int points;
     @OneToMany(mappedBy ="clientID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<Addresses> addresses;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Addresses defaultAddress;
 
+    @Column(name = "default_Address_id")
+    private Integer defaultAddressId;
+
+    @Transient
+    private Addresses defaultAddress;
 }
