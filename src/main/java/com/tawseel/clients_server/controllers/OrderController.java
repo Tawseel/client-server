@@ -25,8 +25,8 @@ public class OrderController {
     @Autowired
     private TokensManager tokensManager;
 
-    @GetMapping("/AllOrders")
-    public ResponseEntity<List<Order>> getAllPurchaseHistory(@RequestHeader("Authorization") String token)
+    @GetMapping("/purchaseHistory")
+    public ResponseEntity<List<Order>> getPurchaseHistory(@RequestHeader("Authorization") String token)
     {
         Integer clientID = tokensManager.verifyToken(token);
         Client client = clientService.findClientById(clientID);
