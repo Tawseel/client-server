@@ -1,6 +1,5 @@
 package com.tawseel.clients_server.services;
 
-import com.tawseel.clients_server.StatusUpdate;
 import com.tawseel.clients_server.TemporaryOrder;
 import com.tawseel.clients_server.repositories.CartOrderValueRepository;
 import com.tawseel.clients_server.repositories.ClientRepository;
@@ -76,17 +75,4 @@ public class OrderService {
         List<Order> orders = client != null ? orderRepository.findAllByClient(client) : new ArrayList<>();
         return orders;
     }
-
-    public boolean updateOrderStatus(StatusUpdate statusUpdate)
-    {
-        Order order = orderRepository.findOrderById(statusUpdate.getOrderID());
-        if(order != null)
-        {
-            order.setStatus(statusUpdate.getOrderStatus());
-            orderRepository.saveAndFlush(order);
-        }
-        else { return false; }
-        return true;
-    }
-
 }
