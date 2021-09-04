@@ -18,10 +18,19 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
-    @GetMapping
-    public ResponseEntity<Client> getItemByStoreID(@RequestHeader("Authorization") String token)
+    @GetMapping("/getClientID")
+    public ResponseEntity<Client> getClientByID(@RequestHeader("Authorization") String token)
     {
         Integer clientID = tokensManager.verifyToken(token);
         return new ResponseEntity<>(clientService.findClientById(clientID), HttpStatus.OK);
+    }
+
+    @PutMapping("/updateClientDetails")
+    public ResponseEntity<Boolean> updateClientDetails(@RequestHeader("Authorization") String token,
+                                       @RequestBody Client client)
+    {
+        Integer clientID = tokensManager.verifyToken(token);
+        boolean succeed = clientService.updateClientDetails(client);
+        return new ResponseEntity<>(succeed, HttpStatus.OK);
     }
 }

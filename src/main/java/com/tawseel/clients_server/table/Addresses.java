@@ -1,10 +1,17 @@
 package com.tawseel.clients_server.table;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name ="addresses")
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Addresses {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,55 +24,6 @@ public class Addresses {
     private String homeNumber;
     @Column(name = "floor_number")
     private String floorNumber;
-
-    public Addresses(String streetName, String streetNumber, String homeNumber, String floorNumber) {
-        this.streetName = streetName;
-        this.streetNumber = streetNumber;
-        this.homeNumber = homeNumber;
-        this.floorNumber = floorNumber;
-    }
-
-    public Addresses() {
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getStreetName() {
-        return streetName;
-    }
-
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
-
-    public String getStreetNumber() {
-        return streetNumber;
-    }
-
-    public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
-    }
-
-    public String getHomeNumber() {
-        return homeNumber;
-    }
-
-    public void setHomeNumber(String homeNumber) {
-        this.homeNumber = homeNumber;
-    }
-
-    public String getFloorNumber() {
-        return floorNumber;
-    }
-
-    public void setFloorNumber(String floorNumber) {
-        this.floorNumber = floorNumber;
-    }
+    @Column(name = "client_id")
+    private int clientID;
 }

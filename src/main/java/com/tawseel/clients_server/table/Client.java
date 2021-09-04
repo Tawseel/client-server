@@ -31,4 +31,10 @@ public class Client {
     private Date registrationDate;
     @Column(name = "points")
     private int points;
+    @OneToMany(mappedBy ="clientID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    private Set<Addresses> addresses;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Addresses defaultAddress;
+
 }
