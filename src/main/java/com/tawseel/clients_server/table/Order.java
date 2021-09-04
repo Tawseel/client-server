@@ -44,5 +44,5 @@ public class Order {
     private int storeID;
 
     @OneToMany(mappedBy ="orderID", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-    private Set<CardOrderValue> cardOrderValueList;
+    private Set<CardOrderValue> values;
 }

@@ -4,14 +4,12 @@ import com.tawseel.clients_server.StatusUpdate;
 import com.tawseel.clients_server.TemporaryOrder;
 import com.tawseel.clients_server.repositories.CartOrderValueRepository;
 import com.tawseel.clients_server.repositories.ClientRepository;
-import com.tawseel.clients_server.repositories.ItemRepository;
 import com.tawseel.clients_server.table.*;
 import com.tawseel.clients_server.repositories.OrderRepository;
 import com.tawseel.clients_server.table.order.CardOrderValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -34,7 +32,7 @@ public class OrderService {
         for (TemporaryOrder temporaryOrder : temporaryOrders) {
              order = createOrderFromTemporaryOrderList(clientID, temporaryOrder);
             totalPrice += order.getItem().getPrice();
-            order.setCardOrderValueList(new HashSet<>(temporaryOrder.getValues()));
+            order.setValues(new HashSet<>(temporaryOrder.getValues()));
             for (CardOrderValue value : temporaryOrder.getValues()) {
                 value.setOrderID(order.getId());
             }
@@ -72,10 +70,11 @@ public class OrderService {
                 new HashSet<>());
     }
 
-    public List<Order> getPurchaseHistory(Client client)
+    public List<Order> getPurchaseHistory(Integer clientId)
     {
-        List<Order> purchaseHistory = orderRepository.findAllByClient(client);
-        return purchaseHistory;
+        Client client = clientRepository.findClientById(clientId);
+        List<Order> orders = client != null ? orderRepository.findAllByClient(client) : new ArrayList<>();
+        return orders;
     }
 
     public boolean updateOrderStatus(StatusUpdate statusUpdate)

@@ -21,16 +21,13 @@ public class OrderController {
     @Autowired
     OrderService orderService;
     @Autowired
-    ClientService clientService;
-    @Autowired
     private TokensManager tokensManager;
 
     @GetMapping("/purchaseHistory")
     public ResponseEntity<List<Order>> getPurchaseHistory(@RequestHeader("Authorization") String token)
     {
         Integer clientID = tokensManager.verifyToken(token);
-        Client client = clientService.findClientById(clientID);
-        return new ResponseEntity<>(orderService.getPurchaseHistory(client), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getPurchaseHistory(clientID), HttpStatus.OK);
     }
 
     @PostMapping("/addOrders")
