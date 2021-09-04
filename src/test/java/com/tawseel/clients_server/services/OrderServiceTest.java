@@ -1,7 +1,9 @@
 package com.tawseel.clients_server.services;
 
 import com.tawseel.clients_server.TemporaryOrder;
+import com.tawseel.clients_server.repositories.ClientRepository;
 import com.tawseel.clients_server.repositories.ItemRepository;
+import com.tawseel.clients_server.table.Client;
 import com.tawseel.clients_server.table.Item;
 import com.tawseel.clients_server.table.order.CardOrderValue;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,9 @@ class OrderServiceTest {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
     @Test
     void addOrder() {
         int clientId = 6;
@@ -34,5 +39,13 @@ class OrderServiceTest {
         cardOrderValueList.add(new CardOrderValue( "tes2t", "test2", 0));
         temporaryOrderList.add(new TemporaryOrder(item, cardOrderValueList));
         orderService.addOrder(clientId, temporaryOrderList);
+    }
+
+    @Test
+    void getClient()
+    {
+        int clientID = 6;
+        Client client = clientRepository.findClientById(6);
+        System.out.println(client);
     }
 }
