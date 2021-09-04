@@ -26,22 +26,21 @@ public class OrderService {
     }
 
     public boolean addOrder(Integer clientID, List<TemporaryOrder> temporaryOrders) {
-        int totalPrice = 0;
-        Order order = null;
+        int totalPrice = temporaryOrders.stream()
+                .map(temporaryOrder -> temporaryOrder.getItem())
+                .map(item -> item.getPrice())
+                .reduce((price1, price2) -> price1 + price2).orElse(0);
         for (TemporaryOrder temporaryOrder : temporaryOrders) {
-             order = createOrderFromTemporaryOrderList(clientID, temporaryOrder);
-            totalPrice += order.getItem().getPrice();
+            Order order = createOrderFromTemporaryOrderList(clientID, temporaryOrder, totalPrice);
+            order = orderRepository.save(order);
             order.setValues(new HashSet<>(temporaryOrder.getValues()));
             for (CardOrderValue value : temporaryOrder.getValues()) {
                 value.setOrderID(order.getId());
             }
-        }
-        if(order != null) {
-            order.setTotalPrice(totalPrice);
             orderRepository.save(order);
+            orderRepository.flush();
         }
         calculatePointsForClient(clientID, totalPrice);
-        orderRepository.flush();
         return true;
     }
 
@@ -54,7 +53,7 @@ public class OrderService {
         clientRepository.saveAndFlush(client);
     }
 
-    private Order createOrderFromTemporaryOrderList(Integer clientID, TemporaryOrder temporaryOrder) {
+    private Order createOrderFromTemporaryOrderList(Integer clientID, TemporaryOrder temporaryOrder, int totalPrice) {
         Item item = temporaryOrder.getItem();
 
         Client client = clientRepository.findClientById(clientID);
@@ -62,7 +61,7 @@ public class OrderService {
         return new Order(0,
                 LocalDateTime.now(),
                 item,
-                0,
+                totalPrice,
                 client,
                 OrderStatus.New,
                 item.getStoreID(),
