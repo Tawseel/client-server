@@ -3,6 +3,7 @@ package com.tawseel.clients_server.repositories;
 import com.tawseel.clients_server.table.Client;
 import com.tawseel.clients_server.table.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

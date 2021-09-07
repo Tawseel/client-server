@@ -29,6 +29,9 @@ class OrderServiceTest {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private ClientService clientService;
+
     @Test
     void addOrder() {
         int clientId = 7;
@@ -47,5 +50,16 @@ class OrderServiceTest {
         int clientID = 6;
         Client client = clientRepository.findClientById(6);
         System.out.println(client);
+    }
+
+    @Test
+    void getRecommended()
+    {
+        int clientID = 6;
+        List<Item> items = clientService.getRecommendedItems(6);
+        for (Item item: items)
+        {
+            System.out.println(item);
+        }
     }
 }
