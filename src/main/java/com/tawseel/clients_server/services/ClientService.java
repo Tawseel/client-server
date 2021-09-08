@@ -5,14 +5,12 @@ import com.tawseel.clients_server.repositories.ClientRepository;
 import com.tawseel.clients_server.repositories.ItemRepository;
 import com.tawseel.clients_server.repositories.OrderRepository;
 import com.tawseel.clients_server.table.*;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ClientService {
@@ -65,15 +63,72 @@ public class ClientService {
 
     public List<Item> getRecommendedItems(Integer clientID)
     {
+        List<Integer> keyList;
+        Map<Integer, Integer> map = new HashMap<>();
+        List<Item> recommendedItems = new ArrayList<>();
         Client client = clientRepository.findClientById(clientID);
         List<Order> orders = orderRepository.findAllByClient(client);
-        Optional<Pair> maxRecommend = orders.stream()
-                .map(order -> new Pair(order.getItem().getId(), 1))
-                .reduce((pair, pair2) -> pair.getKey() == pair2.getKey()? new Pair(pair.getKey(), pair.getVal() + pair2.getVal()): pair);
-        Item item = itemRepository.findItemById(maxRecommend.get().getKey());
-        //todo: need to limit the returned items.
-        List<Item> recommendedItemsByCategory = itemRepository.findAllByCategory(item.getCategory());
-        return recommendedItemsByCategory;
+
+        if(!orders.isEmpty()) {
+            keyList = sortedHighestScoredItems(map, orders);
+            Item item = itemRepository.findItemById(keyList.get(0));
+            //todo: need to limit
+            recommendedItems = itemRepository.findAllByCategory(item.getCategory());
+        }
+        else //in case the user is new and no orders, we need to return a global recs.
+        {
+            orders = orderRepository.findAll();
+            keyList = sortedHighestScoredItems(map, orders);
+            if(keyList.size() >= 3)
+            {
+                for(int i = 0; i < 3; i++)
+                {
+                    Item item = itemRepository.findItemById(keyList.get(i));
+                    recommendedItems.add(item);
+                }
+            }
+        }
+
+        return recommendedItems;
+    }
+
+    private List<Integer> sortedHighestScoredItems(Map<Integer, Integer> map, List<Order> orders) {
+        for(Order i: orders)
+        {
+            Integer j = map.get(i.getItem().getId());
+            map.put(i.getItem().getId(), (j == null) ? 1 : j + 1);
+        }
+        Map<Integer, Integer> sortedMap = sortMap(map);
+        List<Integer> keyList = addMapValuesToList(sortedMap);
+        Collections.reverse(keyList);
+        return keyList;
+    }
+
+
+    public Map<Integer, Integer> sortMap(Map<Integer, Integer> map)
+    {
+        Map<Integer, Integer> temp = new HashMap<>();
+
+        temp = map.entrySet()
+                .stream()
+                .sorted((i1, i2)
+                        -> i1.getValue().compareTo(
+                        i2.getValue()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new));
+        return temp;
+    }
+
+    public List<Integer> addMapValuesToList(Map<Integer, Integer> map)
+    {
+        List<Integer> list = new ArrayList<>();
+        for (Map.Entry<Integer,Integer> entry : map.entrySet())
+        {
+            list.add(entry.getKey());
+        }
+        return list;
     }
 }
 

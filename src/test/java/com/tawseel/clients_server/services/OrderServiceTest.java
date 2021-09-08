@@ -55,11 +55,12 @@ class OrderServiceTest {
     @Test
     void getRecommended()
     {
-        int clientID = 6;
         List<Item> items = clientService.getRecommendedItems(6);
         for (Item item: items)
         {
             System.out.println(item);
         }
     }
+
+
 }
