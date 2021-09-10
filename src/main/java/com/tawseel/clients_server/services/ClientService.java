@@ -72,8 +72,8 @@ public class ClientService {
         if(!orders.isEmpty()) {
             keyList = sortedHighestScoredItems(map, orders);
             Item item = itemRepository.findItemById(keyList.get(0));
-            //todo: need to limit
             recommendedItems = itemRepository.findAllByCategory(item.getCategory());
+            recommendedItems = recommendedItems.stream().limit(3).collect(Collectors.toList());
         }
         else //in case the user is new and no orders, we need to return a global recs.
         {

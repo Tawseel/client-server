@@ -7,18 +7,23 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
+@Table(name= "timeslot")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "store_coordinates")
-public class StoreCoordinates {
+public class TimeSlot {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "longitude")
-    private String longitude;
-    @Column(name = "latitude")
-    private String latitude;
-    @Column(name = "stores_id")
+
+    @Column(name = "store_id")
     private int storeID;
+
+    @Column(name="day")
+    @Enumerated(EnumType.STRING)
+    private Days day;
+
+    @Column(name="hour")
+    private int hour; // 00 -> 23
 }
