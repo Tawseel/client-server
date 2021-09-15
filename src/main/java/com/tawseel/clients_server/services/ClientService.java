@@ -53,9 +53,6 @@ public class ClientService {
             if(defaultAddress != null) {
                 client.setDefaultAddressId(defaultAddress.getId());
             }
-            System.out.println(defaultAddress);
-            System.out.println();
-            System.out.println(client.getDefaultAddress());
             clientRepository.saveAndFlush(client);
         }
         return true;

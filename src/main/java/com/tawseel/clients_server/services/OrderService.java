@@ -27,9 +27,9 @@ public class OrderService {
 
     public boolean addOrder(Integer clientID, List<TemporaryOrder> temporaryOrders) {
         int totalPrice = temporaryOrders.stream()
-                .map(temporaryOrder -> temporaryOrder.getItem())
-                .map(item -> item.getPrice())
-                .reduce((price1, price2) -> price1 + price2).orElse(0);
+                .map(TemporaryOrder::getItem)
+                .map(Item::getPrice)
+                .reduce(Integer::sum).orElse(0);
         for (TemporaryOrder temporaryOrder : temporaryOrders) {
             Order order = createOrderFromTemporaryOrderList(clientID, temporaryOrder, totalPrice);
             order = orderRepository.save(order);
@@ -71,7 +71,6 @@ public class OrderService {
     public List<Order> getPurchaseHistory(Integer clientId)
     {
         Client client = clientRepository.findClientById(clientId);
-        List<Order> orders = client != null ? orderRepository.findAllByClient(client) : new ArrayList<>();
-        return orders;
+        return client != null ? orderRepository.findAllByClient(client) : new ArrayList<>();
     }
 }

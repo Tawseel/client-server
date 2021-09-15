@@ -15,7 +15,6 @@ public class StoreDetailsService {
     public List<StoreDetails> getAllStores()
     {
 
-        List<StoreDetails> list = storeRepository.findAll();
-        return list;
+        return storeRepository.findAll();
     }
 }
