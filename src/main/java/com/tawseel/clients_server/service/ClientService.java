@@ -37,7 +37,7 @@ public class ClientService {
 
     public Client findClientById(Integer clientId) {
         Client client = clientRepository.findClientById(clientId);
-        if(client != null) {
+        if (client != null) {
             Integer defaultAddressId = client.getDefaultAddressId();
             if (defaultAddressId != null) {
                 client.setDefaultAddress(addressRepository.findAddressesById(defaultAddressId));
@@ -70,20 +70,22 @@ public class ClientService {
 
     public List<Item> getRecommendedItems(Integer clientID) {
         List<Integer> keyList;
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> itemToScore = new HashMap<>();
         List<Item> recommendedItems = new ArrayList<>();
         Client client = clientRepository.findClientById(clientID);
         List<Order> orders = orderRepository.findAllByClient(client);
 
         if (!orders.isEmpty()) {
-            keyList = sortedHighestScoredItems(map, orders);
+            keyList = sortedHighestScoredItems(itemToScore, orders);
             Item item = itemRepository.findItemById(keyList.get(0));
-            recommendedItems = itemRepository.findAllByCategory(item.getCategory());
-            recommendedItems = recommendedItems.stream().limit(3).collect(Collectors.toList());
-        } else //in case the user is new and no orders, we need to return a global recs.
-        {
+            recommendedItems = itemRepository
+                    .findAllByCategory(item.getCategory())
+                    .stream()
+                    .limit(3)
+                    .collect(Collectors.toList());
+        } else {  //in case the user is new and no orders, we need to return a global recs.
             orders = orderRepository.findAll();
-            keyList = sortedHighestScoredItems(map, orders);
+            keyList = sortedHighestScoredItems(itemToScore, orders);
             if (keyList.size() >= 3) {
                 for (int i = 0; i < 3; i++) {
                     Item item = itemRepository.findItemById(keyList.get(i));
@@ -95,13 +97,14 @@ public class ClientService {
         return recommendedItems;
     }
 
-    private List<Integer> sortedHighestScoredItems(Map<Integer, Integer> map, List<Order> orders) {
-        for (Order i : orders) {
-            Integer j = map.get(i.getItem().getId());
-            map.put(i.getItem().getId(), (j == null) ? 1 : j + 1);
+    private List<Integer> sortedHighestScoredItems(Map<Integer, Integer> itemToScore, List<Order> orders) {
+        for (Order order : orders) {
+            Integer itemId = order.getItem().getId();
+            Integer j = itemToScore.get(itemId);
+            itemToScore.put(itemId, (j == null) ? 1 : j + 1);
         }
 
-        Map<Integer, Integer> sortedMap = sortMap(map);
+        Map<Integer, Integer> sortedMap = sortMap(itemToScore);
         List<Integer> keyList = addMapValuesToList(sortedMap);
         Collections.reverse(keyList);
         return keyList;
