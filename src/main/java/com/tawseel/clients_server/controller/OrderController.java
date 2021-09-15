@@ -15,21 +15,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
+    private final OrderService orderService;
+    private final TokensManager tokensManager;
+
     @Autowired
-    OrderService orderService;
-    @Autowired
-    private TokensManager tokensManager;
+    public OrderController(OrderService orderService,
+                           TokensManager tokensManager) {
+        this.orderService = orderService;
+        this.tokensManager = tokensManager;
+    }
 
     @GetMapping("/purchaseHistory")
-    public ResponseEntity<List<Order>> getPurchaseHistory(@RequestHeader("Authorization") String token)
-    {
+    public ResponseEntity<List<Order>> getPurchaseHistory(@RequestHeader("Authorization") String token) {
         Integer clientID = tokensManager.verifyToken(token);
         return new ResponseEntity<>(orderService.getPurchaseHistory(clientID), HttpStatus.OK);
     }
 
     @PostMapping("/addOrders")
-    public ResponseEntity<Boolean> addOrder(@RequestHeader("Authorization") String token,@RequestBody List<TemporaryOrder> temporaryOrders)
-    {
+    public ResponseEntity<Boolean> addOrder(@RequestHeader("Authorization") String token,
+                                            @RequestBody List<TemporaryOrder> temporaryOrders) {
         Integer clientID = tokensManager.verifyToken(token);
         boolean succeed = orderService.addOrder(clientID, temporaryOrders);
         return new ResponseEntity<>(succeed, HttpStatus.OK);

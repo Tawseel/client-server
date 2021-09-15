@@ -17,17 +17,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/store")
 public class StoreDetailsController {
+
+    private final TokensManager tokensManager;
+    private final StoreDetailsService storeDetailsService;
+
     @Autowired
-    private TokensManager tokensManager;
-    @Autowired
-    StoreDetailsService storeService;
+    public StoreDetailsController(TokensManager tokensManager,
+                                  StoreDetailsService storeDetailsService) {
+        this.tokensManager = tokensManager;
+        this.storeDetailsService = storeDetailsService;
+    }
 
     @GetMapping("/getAllStores")
     public ResponseEntity<List<StoreDetails>> getAllStores(@RequestHeader("Authorization") String  token)
     {
-        Integer clientID = tokensManager.verifyToken(token);
-        List<StoreDetails> storesDetails = storeService.getAllStores();
-        System.out.println(storesDetails);
-        return new ResponseEntity<>(storesDetails, HttpStatus.OK);
+        tokensManager.verifyToken(token);
+        return new ResponseEntity<>(storeDetailsService.getAllStores(), HttpStatus.OK);
     }
 }

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
+
     private final ClientRepository clientRepository;
     private final ItemRepository itemRepository;
     private final AddressRepository addressRepository;
@@ -36,27 +37,35 @@ public class ClientService {
 
     public Client findClientById(Integer clientId) {
         Client client = clientRepository.findClientById(clientId);
-        Integer defaultAddressId = client.getDefaultAddressId();
-        if (defaultAddressId != null) {
-            client.setDefaultAddress(addressRepository.findAddressesById(defaultAddressId));
+        if(client != null) {
+            Integer defaultAddressId = client.getDefaultAddressId();
+            if (defaultAddressId != null) {
+                client.setDefaultAddress(addressRepository.findAddressesById(defaultAddressId));
+            }
         }
+
         return client;
     }
 
     @Transactional
-    public boolean updateClientDetails(Integer clientId, Client client) {
-        if (clientId != null) {
+    public boolean updateClientDetails(Client client) {
+        boolean isUpdated = false;
+        if (client != null) {
             Set<Addresses> addresses = client.getAddresses();
             if (addresses != null) {
-                addresses.forEach(addresses1 -> addresses1.setClientID(clientId));
+                addresses.forEach(addresses1 -> addresses1.setClientID(client.getId()));
             }
+
             Addresses defaultAddress = client.getDefaultAddress();
             if (defaultAddress != null) {
                 client.setDefaultAddressId(defaultAddress.getId());
             }
+
             clientRepository.saveAndFlush(client);
+            isUpdated = true;
         }
-        return true;
+
+        return isUpdated;
     }
 
     public List<Item> getRecommendedItems(Integer clientID) {
@@ -91,26 +100,25 @@ public class ClientService {
             Integer j = map.get(i.getItem().getId());
             map.put(i.getItem().getId(), (j == null) ? 1 : j + 1);
         }
+
         Map<Integer, Integer> sortedMap = sortMap(map);
         List<Integer> keyList = addMapValuesToList(sortedMap);
         Collections.reverse(keyList);
         return keyList;
     }
 
-
-    public Map<Integer, Integer> sortMap(Map<Integer, Integer> map) {
-        return map.entrySet()
+    private Map<Integer, Integer> sortMap(Map<Integer, Integer> map) {
+        return map
+                .entrySet()
                 .stream()
-                .sorted((i1, i2)
-                        -> i1.getValue().compareTo(
-                        i2.getValue()))
+                .sorted(Comparator.comparing(Map.Entry::getValue))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    public List<Integer> addMapValuesToList(Map<Integer, Integer> map) {
+    private List<Integer> addMapValuesToList(Map<Integer, Integer> map) {
         List<Integer> list = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             list.add(entry.getKey());

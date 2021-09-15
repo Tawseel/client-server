@@ -9,12 +9,15 @@ import java.util.List;
 
 @Service
 public class StoreDetailsService {
+
+    private final StoreDetailsRepository storeRepository;
+
     @Autowired
-    StoreDetailsRepository storeRepository;
+    public StoreDetailsService(StoreDetailsRepository storeRepository) {
+        this.storeRepository = storeRepository;
+    }
 
-    public List<StoreDetails> getAllStores()
-    {
-
+    public List<StoreDetails> getAllStores() {
         return storeRepository.findAll();
     }
 }

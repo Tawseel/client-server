@@ -12,23 +12,15 @@ import java.util.Set;
 
 @Service
 public class StoreService {
-    @Autowired
-    StoreRepository storeRepository;
+    private final StoreRepository storeRepository;
 
-    public List<Item> getItemsByStoreId(int storeId)
-    {
-        //better exception.
-        Store store = storeRepository.findStoreById(storeId);
-        if(store != null) {
-            Set<Item> items = store.getItems();
-            List<Item> list = new ArrayList<>(items);
-            return list;
-        }
-        else
-        {
-            return new ArrayList<>();
-        }
+    @Autowired
+    public StoreService(StoreRepository storeRepository) {
+        this.storeRepository = storeRepository;
     }
 
-
+    public List<Item> getItemsByStoreId(Integer storeId) {
+        Store store = storeRepository.findStoreById(storeId);
+        return store != null ? new ArrayList<>(store.getItems()) : new ArrayList<>();
+    }
 }

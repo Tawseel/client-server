@@ -15,7 +15,7 @@ import java.util.Date;
 public class TokensManager {
 
     private final String key = "securesecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecure";
-    final String userIdHeaderKey = "userId";
+    private final String userIdHeaderKey = "userId";
 
     public Integer verifyToken(String token) {
         Integer userId = null;

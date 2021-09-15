@@ -13,16 +13,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/store")
 public class StoreController {
+
+    private final StoreService storeService;
+    private final TokensManager tokensManager;
+
     @Autowired
-    StoreService storeService;
-    @Autowired
-    private TokensManager tokensManager;
+    public StoreController(StoreService storeService, TokensManager tokensManager) {
+        this.storeService = storeService;
+        this.tokensManager = tokensManager;
+    }
 
     @GetMapping("/{id}/items")
     public ResponseEntity<List<Item>> getItemByStoreID(@PathVariable("id") int storeID,
-                                                       @RequestHeader("Authorization") String token)
-    {
-        Integer clientID = tokensManager.verifyToken(token);
+                                                       @RequestHeader("Authorization") String token) {
+        tokensManager.verifyToken(token);
         return new ResponseEntity<>(storeService.getItemsByStoreId(storeID), HttpStatus.OK);
     }
 }

@@ -18,5 +18,4 @@ public class SecurityConfigProduction extends WebSecurityConfigurerAdapter {
         http.requiresChannel().anyRequest().requiresSecure();
         http.cors().and().csrf().disable();
     }
-
 }

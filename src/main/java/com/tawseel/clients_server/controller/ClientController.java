@@ -15,16 +15,18 @@ import java.util.List;
 @RequestMapping("/client")
 public class ClientController {
 
-    @Autowired
-    private TokensManager tokensManager;
+    private final TokensManager tokensManager;
+    private final ClientService clientService;
 
     @Autowired
-    private ClientService clientService;
-
+    public ClientController(TokensManager tokensManager,
+                            ClientService clientService) {
+        this.tokensManager = tokensManager;
+        this.clientService = clientService;
+    }
 
     @GetMapping
-    public ResponseEntity<Client> getClient(@RequestHeader("Authorization") String token)
-    {
+    public ResponseEntity<Client> getClient(@RequestHeader("Authorization") String token) {
         Integer clientID = tokensManager.verifyToken(token);
         Client client = clientService.findClientById(clientID);
 
@@ -33,16 +35,14 @@ public class ClientController {
 
     @PutMapping("/updateClientDetails")
     public ResponseEntity<Boolean> updateClientDetails(@RequestHeader("Authorization") String token,
-                                       @RequestBody Client client)
-    {
-        Integer clientID = tokensManager.verifyToken(token);
-        boolean succeed = clientService.updateClientDetails(clientID, client);
+                                                       @RequestBody Client client) {
+        tokensManager.verifyToken(token);
+        boolean succeed = clientService.updateClientDetails(client);
         return new ResponseEntity<>(succeed, HttpStatus.OK);
     }
 
     @GetMapping("/recommendedItems")
-    public ResponseEntity<List<Item>> getRecommendedItems(@RequestHeader("Authorization") String token)
-    {
+    public ResponseEntity<List<Item>> getRecommendedItems(@RequestHeader("Authorization") String token) {
         Integer clientID = tokensManager.verifyToken(token);
         return new ResponseEntity<>(clientService.getRecommendedItems(clientID), HttpStatus.OK);
     }

@@ -17,15 +17,15 @@ import java.util.*;
 
 @Service
 public class OrderService {
+
     private final OrderRepository orderRepository;
     private final ClientRepository clientRepository;
-    private final CartOrderValueRepository cartOrderValueRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, ClientRepository clientRepository, CartOrderValueRepository cartOrderValueRepository) {
+    public OrderService(OrderRepository orderRepository,
+                        ClientRepository clientRepository) {
         this.orderRepository = orderRepository;
         this.clientRepository = clientRepository;
-        this.cartOrderValueRepository = cartOrderValueRepository;
     }
 
     public boolean addOrder(Integer clientID, List<TemporaryOrder> temporaryOrders) {
@@ -58,7 +58,6 @@ public class OrderService {
 
     private Order createOrderFromTemporaryOrderList(Integer clientID, TemporaryOrder temporaryOrder) {
         Item item = temporaryOrder.getItem();
-        //TODO: to builder
         return new Order(0,
                 LocalDateTime.now(),
                 item,

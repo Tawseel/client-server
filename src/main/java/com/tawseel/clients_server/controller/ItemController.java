@@ -14,18 +14,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/item")
 public class ItemController {
-    @Autowired
-    ItemService itemService;
+
+    private final ItemService itemService;
+    private final TokensManager tokensManager;
 
     @Autowired
-    private TokensManager tokensManager;
-
+    public ItemController(ItemService itemService,
+                          TokensManager tokensManager) {
+        this.itemService = itemService;
+        this.tokensManager = tokensManager;
+    }
 
     @GetMapping("/{id}/ingredients")
     public ResponseEntity<List<Ingredients>> getIngredientsByItemID(@PathVariable("id") int itemID,
-                                                                    @RequestHeader("Authorization") String token)
-    {
-        Integer clientID = tokensManager.verifyToken(token);
+                                                                    @RequestHeader("Authorization") String token) {
+        tokensManager.verifyToken(token);
         return new ResponseEntity<>(itemService.getIngredientsByItemID(itemID), HttpStatus.OK);
     }
 }

@@ -12,6 +12,7 @@ import java.util.Set;
 
 @Service
 public class ItemService {
+
     private final ItemRepository itemRepository;
 
     @Autowired
@@ -19,16 +20,8 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public List<Ingredients> getIngredientsByItemID(Integer itemID)
-    {
+    public List<Ingredients> getIngredientsByItemID(Integer itemID) {
         Item item = itemRepository.findItemById(itemID);
-        if(item != null) {
-            Set<Ingredients> ingredients = item.getIngredients();
-            return new ArrayList<>(ingredients);
-        }
-        else
-        {
-            return new ArrayList<>();
-        }
+        return item != null ? new ArrayList<>(item.getIngredients()) : new ArrayList<>();
     }
 }
