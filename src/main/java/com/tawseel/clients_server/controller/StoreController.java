@@ -3,6 +3,7 @@ package com.tawseel.clients_server.controller;
 import com.tawseel.clients_server.security.TokensManager;
 import com.tawseel.clients_server.table.item.Item;
 import com.tawseel.clients_server.service.StoreService;
+import com.tawseel.clients_server.table.store.StoreDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,12 @@ public class StoreController {
                                                        @RequestHeader("Authorization") String token) {
         tokensManager.verifyToken(token);
         return new ResponseEntity<>(storeService.getItemsByStoreId(storeID), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllStores")
+    public ResponseEntity<List<StoreDetails>> getAllStores(@RequestHeader("Authorization") String  token)
+    {
+        tokensManager.verifyToken(token);
+        return new ResponseEntity<>(storeService.getAllStores(), HttpStatus.OK);
     }
 }
