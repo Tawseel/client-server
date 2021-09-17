@@ -69,26 +69,29 @@ public class ClientService {
     }
 
     public List<Item> getRecommendedItems(Integer clientID) {
-        List<Integer> keyList;
-        Map<Integer, Integer> itemToScore = new HashMap<>();
+        List<Item> keyList = null;
         List<Item> recommendedItems = new ArrayList<>();
         Client client = clientRepository.findClientById(clientID);
         List<Order> orders = orderRepository.findAllByClient(client);
 
         if (!orders.isEmpty()) {
-            keyList = sortedHighestScoredItems(itemToScore, orders);
-            Item item = itemRepository.findItemById(keyList.get(0));
-            recommendedItems = itemRepository
-                    .findAllByCategory(item.getCategory())
-                    .stream()
-                    .limit(3)
-                    .collect(Collectors.toList());
-        } else {  //in case the user is new and no orders, we need to return a global recs.
+            keyList = sortedHighestScoredItems(orders);
+            if(keyList.size() > 0) {
+                Item item = keyList.get(0);
+                recommendedItems = itemRepository
+                        .findAllByCategory(item.getCategory())
+                        .stream()
+                        .limit(3)
+                        .collect(Collectors.toList());
+            }
+        }
+
+        if(keyList == null || keyList.isEmpty()){  //in case the user is new and no orders, we need to return a global recs.
             orders = orderRepository.findAll();
-            keyList = sortedHighestScoredItems(itemToScore, orders);
+            keyList = sortedHighestScoredItems(orders);
             if (keyList.size() >= 3) {
                 for (int i = 0; i < 3; i++) {
-                    Item item = itemRepository.findItemById(keyList.get(i));
+                    Item item = keyList.get(i);
                     recommendedItems.add(item);
                 }
             }
@@ -97,36 +100,30 @@ public class ClientService {
         return recommendedItems;
     }
 
-    private List<Integer> sortedHighestScoredItems(Map<Integer, Integer> itemToScore, List<Order> orders) {
+    public static List<Item> sortedHighestScoredItems(List<Order> orders) {
+        Map<Item, Integer> itemToScore = new HashMap<>();
         for (Order order : orders) {
-            Integer itemId = order.getItem().getId();
-            Integer j = itemToScore.get(itemId);
-            itemToScore.put(itemId, (j == null) ? 1 : j + 1);
+            Item item = order.getItem();
+            if(item != null) {
+                Integer score = itemToScore.get(item);
+                itemToScore.put(item, (score == null) ? 1 : score + 1);
+            }
         }
 
-        Map<Integer, Integer> sortedMap = sortMap(itemToScore);
-        List<Integer> keyList = addMapValuesToList(sortedMap);
+        List<Item> keyList = new ArrayList<>(sortMap(itemToScore).keySet());
         Collections.reverse(keyList);
         return keyList;
     }
 
-    private Map<Integer, Integer> sortMap(Map<Integer, Integer> map) {
+    private static Map<Item, Integer> sortMap(Map<Item, Integer> map) {
         return map
                 .entrySet()
                 .stream()
-                .sorted(Comparator.comparing(Map.Entry::getValue))
+                .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
-    }
-
-    private List<Integer> addMapValuesToList(Map<Integer, Integer> map) {
-        List<Integer> list = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            list.add(entry.getKey());
-        }
-        return list;
     }
 }
 
