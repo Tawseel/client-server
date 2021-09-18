@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "card_order_value")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class CardOrderValue {
     @Id
@@ -24,9 +25,6 @@ public class CardOrderValue {
     @Column(name = "order_id")
     private int orderID;
 
-    public CardOrderValue(String ingredientName, String ingredientValue, int orderID) {
-        this.ingredientName = ingredientName;
-        this.ingredientValue = ingredientValue;
-        this.orderID = orderID;
-    }
+    @Column(name = "price")
+    private int price;
 }

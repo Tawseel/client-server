@@ -24,8 +24,5 @@ public class IngredientConfiguration {
 
     @Column(name= "price")
     private int price;
-
-    @Column(name = "ingredient_id")
-    private int ingredientID;
 }
 

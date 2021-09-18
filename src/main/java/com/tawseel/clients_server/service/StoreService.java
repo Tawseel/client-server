@@ -26,7 +26,9 @@ public class StoreService {
 
     public List<Item> getItemsByStoreId(Integer storeId) {
         Store store = storeRepository.findStoreById(storeId);
-        return store != null ? new ArrayList<>(store.getItems()) : new ArrayList<>();
+        ArrayList<Item> list = store != null ? new ArrayList<>(store.getItems()) : new ArrayList<>();
+
+        return list;
     }
 
     public List<StoreDetails> getAllStores() {
